@@ -1,0 +1,1593 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dkbk0809 | AI-Powered GitHub Portfolio</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* UI-UX-Pro-Max 核心設計系統與變數 */
+        @property --angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+
+        :root {
+            /* OLED 深度極暗底色 */
+            --bg-pure: #030303;
+            --bg-primary: #09090b;
+            --bg-secondary: #121216;
+            --bg-card: rgba(18, 18, 24, 0.8);
+            --bg-card-hover: rgba(24, 24, 33, 0.95);
+            
+            /* 邊框與光暈 */
+            --border-color: rgba(255, 255, 255, 0.05);
+            --border-hover: rgba(99, 102, 241, 0.5);
+            
+            /* 奢華流動霓虹漸層色 */
+            --gradient-primary: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --gradient-rainbow: conic-gradient(from var(--angle), #6366f1, #a855f7, #ec4899, #06b6d4, #6366f1);
+            
+            /* 高對比與微弱對比之文字 */
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            
+            /* 精選色 */
+            --accent: #6366f1;
+            --accent-glow: rgba(99, 102, 241, 0.15);
+            
+            /* 陰影與毛玻璃 */
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+            --shadow-md: 0 12px 30px rgba(0, 0, 0, 0.6);
+            --shadow-lg: 0 20px 50px rgba(0, 0, 0, 0.8);
+            
+            --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-bounce: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            
+            --radius-sm: 10px;
+            --radius-md: 18px;
+            --radius-lg: 28px;
+            
+            --font-main: 'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif;
+            --font-title: 'Outfit', var(--font-main);
+        }
+
+        /* 重設基礎樣式與順滑滾動 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-pure);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.65;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* 高級滾動條設計 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-pure);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #27272a;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #3f3f46;
+        }
+
+        /* 絢麗極光流體背景 */
+        .aurora-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .aurora-orb {
+            position: absolute;
+            width: 700px;
+            height: 700px;
+            border-radius: 50%;
+            filter: blur(160px);
+            opacity: 0.18;
+            mix-blend-mode: screen;
+            animation: aurora-move 25s infinite alternate ease-in-out;
+        }
+
+        .orb-1 {
+            background: radial-gradient(circle, rgba(99,102,241,0.8) 0%, rgba(168,85,247,0.1) 70%);
+            top: -250px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            background: radial-gradient(circle, rgba(236,72,153,0.8) 0%, rgba(6,182,212,0.1) 70%);
+            bottom: -300px;
+            left: -150px;
+            animation-delay: -7s;
+            width: 600px;
+            height: 600px;
+        }
+
+        .orb-3 {
+            background: radial-gradient(circle, rgba(6,182,212,0.8) 0%, rgba(99,102,241,0.1) 70%);
+            top: 40%;
+            left: 30%;
+            opacity: 0.1;
+            width: 500px;
+            height: 500px;
+            animation: aurora-float 30s infinite alternate ease-in-out;
+        }
+
+        @keyframes aurora-move {
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            50% { transform: translate(60px, 80px) rotate(90deg) scale(1.1); }
+            100% { transform: translate(-40px, -60px) rotate(180deg) scale(0.9); }
+        }
+
+        @keyframes aurora-float {
+            0% { transform: translate(0, 0) scale(0.9); }
+            100% { transform: translate(-80px, 100px) scale(1.2); }
+        }
+
+        /* 網頁主容器 */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 50px 24px;
+            position: relative;
+        }
+
+        /* PROFILE SECTION - 個人資訊區 */
+        header {
+            margin-bottom: 45px;
+            animation: page-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        .profile-container-inner {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+            position: relative;
+        }
+
+        .profile-main-row {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .avatar-glow-wrapper {
+            position: relative;
+            flex-shrink: 0;
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            padding: 5px;
+            background: var(--gradient-primary);
+            box-shadow: 0 0 35px rgba(168, 85, 247, 0.3);
+        }
+
+        .profile-avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--bg-primary);
+            background: var(--bg-primary);
+        }
+
+        .profile-details {
+            flex-grow: 1;
+        }
+
+        .profile-name-badge {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .profile-name {
+            font-family: var(--font-title);
+            font-size: 2.6rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+            background: linear-gradient(to right, #ffffff, #cbd5e1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .profile-tag {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            color: #a855f7;
+            background: rgba(168, 85, 247, 0.1);
+            padding: 6px 16px;
+            border-radius: 30px;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            text-transform: uppercase;
+        }
+
+        .profile-bio {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 24px;
+            max-width: 750px;
+            font-weight: 400;
+        }
+
+        .stats-grid {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 120px;
+            transition: var(--transition-smooth);
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .stat-val {
+            font-family: var(--font-title);
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .stat-lbl {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .actions-row {
+            margin-top: 10px;
+        }
+
+        /* 奢華霓虹發光按鈕 */
+        .btn-glow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--gradient-primary);
+            color: white;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 1rem;
+            transition: var(--transition-bounce);
+            box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-glow:hover {
+            transform: translateY(-4px) scale(1.03);
+            box-shadow: 0 0 35px rgba(168, 85, 247, 0.6);
+        }
+
+        .btn-glow svg {
+            fill: currentColor;
+            width: 20px;
+            height: 20px;
+        }
+
+        /* 程式語言佔比統計區 (GitHub Style) */
+        .language-stats-wrapper {
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 24px;
+        }
+
+        .lang-stats-header {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .lang-bar-container {
+            height: 10px;
+            width: 100%;
+            background: #1e1e24;
+            border-radius: 5px;
+            display: flex;
+            overflow: hidden;
+            margin-bottom: 16px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        .lang-bar-segment {
+            height: 100%;
+            transition: width 0.8s ease-in-out;
+        }
+
+        .lang-legend-list {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            list-style: none;
+        }
+
+        .lang-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .lang-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .lang-percent {
+            color: var(--text-muted);
+            margin-left: 2px;
+        }
+
+        /* CONTROL PANEL - 篩選控制項 */
+        .control-panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 50px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            box-shadow: var(--shadow-md);
+            animation: page-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+        }
+
+        .search-sort-row {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .search-box-wrapper {
+            position: relative;
+            flex-grow: 1;
+            min-width: 280px;
+        }
+
+        .search-box-wrapper svg {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            fill: var(--text-muted);
+            width: 20px;
+            height: 20px;
+            transition: var(--transition-smooth);
+        }
+
+        .search-input {
+            width: 100%;
+            background: rgba(3, 3, 3, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px 14px 48px;
+            color: var(--text-primary);
+            font-size: 0.98rem;
+            outline: none;
+            transition: var(--transition-smooth);
+        }
+
+        .search-input:focus {
+            border-color: var(--accent);
+            background: rgba(3, 3, 3, 0.95);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .search-input:focus + svg {
+            fill: var(--accent);
+        }
+
+        .sort-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 200px;
+        }
+
+        .sort-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .sort-select {
+            flex-grow: 1;
+            background: rgba(3, 3, 3, 0.7);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-sm);
+            padding: 14px 16px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            outline: none;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2394a3b8'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 20px;
+            padding-right: 40px;
+        }
+
+        .sort-select:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+        }
+
+        .filter-tags-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 18px;
+        }
+
+        .tag-list {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .tag-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 8px 16px;
+            border-radius: 30px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition-smooth);
+        }
+
+        .tag-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .tag-btn.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+        }
+
+        /* 儲存庫看板區域設計 */
+        .section-header {
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: page-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
+        }
+
+        .section-title {
+            font-family: var(--font-title);
+            font-size: 1.6rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .badge-count {
+            background: rgba(255, 255, 255, 0.04);
+            padding: 3px 12px;
+            border-radius: 30px;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+            font-family: var(--font-title);
+        }
+
+        /* 1. FEATURED REPOS SECTION - 精選儲存庫 (流光邊框卡片) */
+        .featured-wrapper {
+            margin-bottom: 55px;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+            gap: 28px;
+            animation: page-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
+        }
+
+        /* ★★★ 超強流光卡片邊框特效 ★★★ */
+        .glow-card {
+            position: relative;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 240px;
+            cursor: pointer;
+            z-index: 1;
+            transition: var(--transition-smooth);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* 卡片的外發光 Backlight Glow */
+        .glow-card::after {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            background: var(--gradient-rainbow);
+            border-radius: var(--radius-md);
+            z-index: -2;
+            opacity: 0;
+            filter: blur(20px);
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /* 旋轉流光邊界 Border Layer */
+        .glow-card::before {
+            content: '';
+            position: absolute;
+            inset: 0px;
+            padding: 2px; /* 漸層邊框的厚度 */
+            background: var(--gradient-rainbow);
+            -webkit-mask: 
+                linear-gradient(#fff 0 0) content-box, 
+                linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            border-radius: var(--radius-md);
+            z-index: -1;
+            opacity: 0.15;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .glow-card:hover {
+            transform: translateY(-8px);
+            background: var(--bg-card-hover);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* 懸浮時讓 conic-gradient 旋轉並使邊框發光 */
+        .glow-card:hover::before {
+            opacity: 1;
+            animation: rotate-gradient 3s linear infinite;
+        }
+
+        .glow-card:hover::after {
+            opacity: 0.25;
+            animation: rotate-gradient 3s linear infinite;
+        }
+
+        @keyframes rotate-gradient {
+            0% {
+                --angle: 0deg;
+            }
+            100% {
+                --angle: 360deg;
+            }
+        }
+
+        .glow-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: #ec4899;
+            background: rgba(236, 72, 153, 0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+            border: 1px solid rgba(236, 72, 153, 0.2);
+            text-transform: uppercase;
+        }
+
+        .glow-badge svg {
+            width: 12px;
+            height: 12px;
+            fill: currentColor;
+        }
+
+        /* 專案內容排版 */
+        .repo-title-wrapper {
+            margin-bottom: 12px;
+        }
+
+        .featured-name {
+            font-family: var(--font-title);
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            max-width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .featured-name:hover {
+            color: #a855f7;
+        }
+
+        .featured-desc {
+            color: var(--text-secondary);
+            font-size: 0.98rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 4.8em;
+        }
+
+        .featured-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.88rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 16px;
+            font-weight: 500;
+        }
+
+        /* 2. GENERAL REPOS GRID - 一般儲存庫 (簡約毛玻璃卡片) */
+        .all-repos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 24px;
+            animation: page-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.35s both;
+        }
+
+        .simple-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 210px;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition-smooth);
+        }
+
+        .simple-card:hover {
+            transform: translateY(-5px);
+            background: var(--bg-card-hover);
+            border-color: rgba(99, 102, 241, 0.3);
+            box-shadow: var(--shadow-md);
+        }
+
+        .simple-name {
+            font-family: var(--font-title);
+            font-size: 1.22rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 90%;
+            margin-bottom: 8px;
+        }
+
+        .simple-name:hover {
+            color: var(--accent);
+        }
+
+        .simple-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            height: 4.5em;
+            margin-bottom: 16px;
+        }
+
+        /* 圖示與標記 */
+        .icon-link {
+            fill: var(--text-muted);
+            width: 16px;
+            height: 16px;
+            transition: var(--transition-smooth);
+            flex-shrink: 0;
+        }
+
+        .glow-card:hover .icon-link,
+        .simple-card:hover .icon-link {
+            fill: var(--accent);
+            transform: translate(2px, -2px);
+        }
+
+        .meta-group-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .meta-stat {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-muted);
+            transition: var(--transition-smooth);
+        }
+
+        .meta-stat:hover {
+            color: var(--text-primary);
+        }
+
+        .meta-stat svg {
+            fill: currentColor;
+            width: 14px;
+            height: 14px;
+        }
+
+        .meta-date {
+            color: var(--text-muted);
+        }
+
+        /* SKELETON LOADING - 載入中骨架屏 */
+        .skeleton-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            height: 210px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .skeleton-shimmer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.02) 50%, rgba(255,255,255,0) 100%);
+            animation: shimmer 1.6s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .skeleton-h {
+            height: 20px;
+            background: rgba(255,255,255,0.04);
+            border-radius: 4px;
+            margin-bottom: 12px;
+        }
+
+        .skeleton-p {
+            height: 14px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+
+        .skeleton-f {
+            height: 16px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 4px;
+            margin-top: 12px;
+        }
+
+        /* 錯誤與空白狀態 */
+        .status-box {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 70px 24px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .status-box svg {
+            width: 56px;
+            height: 56px;
+            fill: var(--text-muted);
+        }
+
+        .status-box-title {
+            font-family: var(--font-title);
+            font-size: 1.40rem;
+            font-weight: 700;
+        }
+
+        .status-box-desc {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            max-width: 400px;
+            margin-bottom: 8px;
+        }
+
+        /* 按鈕定義 */
+        .btn-outline {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: var(--transition-smooth);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* 網頁淡入動畫 */
+        @keyframes page-fade-in {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* FOOTER - 頁尾 */
+        footer {
+            margin-top: 100px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding: 35px 24px;
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: var(--transition-smooth);
+            font-weight: 600;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        /* Responsive 響應式佈局 */
+        @media (max-width: 900px) {
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .profile-main-row {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .avatar-glow-wrapper {
+                width: 130px;
+                height: 130px;
+            }
+
+            .profile-name-badge {
+                justify-content: center;
+            }
+
+            .stats-grid {
+                justify-content: center;
+            }
+
+            .profile-bio {
+                margin: 0 auto 20px auto;
+            }
+
+            .search-sort-row {
+                flex-direction: column;
+            }
+
+            .sort-wrapper {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 柔和極光背景 -->
+    <div class="aurora-bg">
+        <div class="aurora-orb orb-1"></div>
+        <div class="aurora-orb orb-2"></div>
+        <div class="aurora-orb orb-3"></div>
+    </div>
+
+    <div class="container">
+        <!-- HEADER PROFILE SECTION -->
+        <header>
+            <div id="profile-area">
+                <!-- 預設骨架載入 -->
+                <div class="profile-container-inner">
+                    <div class="profile-main-row">
+                        <div class="avatar-glow-wrapper" style="background: rgba(255,255,255,0.05); box-shadow: none;">
+                            <div style="width:100%; height:100%; border-radius:50%; background:var(--bg-secondary);"></div>
+                        </div>
+                        <div class="profile-details" style="width: 100%;">
+                            <div class="skeleton-h" style="width: 260px; height: 35px;"></div>
+                            <div class="skeleton-p" style="width: 85%; height: 16px;"></div>
+                            <div class="skeleton-p" style="width: 65%; height: 16px;"></div>
+                            <div class="stats-grid" style="margin-top: 24px;">
+                                <div class="skeleton-p" style="width: 100px; height: 50px; border-radius:8px;"></div>
+                                <div class="skeleton-p" style="width: 100px; height: 50px; border-radius:8px;"></div>
+                                <div class="skeleton-p" style="width: 100px; height: 50px; border-radius:8px;"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- CONTROL PANEL -->
+        <section class="control-panel">
+            <div class="search-sort-row">
+                <div class="search-box-wrapper">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                    </svg>
+                    <input type="text" id="search-input" class="search-input" placeholder="搜尋儲存庫名稱、描述或程式語言..." disabled>
+                </div>
+                <div class="sort-wrapper">
+                    <span class="sort-label">排序依據</span>
+                    <select id="sort-select" class="sort-select" disabled>
+                        <option value="updated">最近更新</option>
+                        <option value="stars">星標數量 (Stars)</option>
+                        <option value="name">儲存庫名稱 (A-Z)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 語言標籤 -->
+            <div class="filter-tags-container" id="filter-tags-section" style="display: none;">
+                <span class="sort-label">程式語言</span>
+                <div class="tag-list" id="language-tags">
+                    <!-- 動態渲染 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- REPOSITORIES MAIN SECTION -->
+        <main>
+            <!-- 1. 精選儲存庫區 -->
+            <div id="featured-section-wrapper" class="featured-wrapper" style="display: none;">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        精選專案
+                        <span class="badge-count" id="featured-count">0</span>
+                    </h2>
+                </div>
+                <div class="featured-grid" id="featured-repos-grid">
+                    <!-- 載入中 -->
+                </div>
+            </div>
+
+            <!-- 2. 所有儲存庫區 -->
+            <div class="section-header">
+                <h2 class="section-title" id="main-list-title">
+                    公開儲存庫
+                    <span class="badge-count" id="all-count">0</span>
+                </h2>
+            </div>
+            <div class="all-repos-grid" id="all-repos-grid">
+                <!-- 預設骨架屏 -->
+                <div class="skeleton-card"><div class="skeleton-shimmer"></div><div class="skeleton-h"></div><div><div class="skeleton-p"></div><div class="skeleton-p"></div></div><div class="skeleton-f"></div></div>
+                <div class="skeleton-card"><div class="skeleton-shimmer"></div><div class="skeleton-h"></div><div><div class="skeleton-p"></div><div class="skeleton-p"></div></div><div class="skeleton-f"></div></div>
+                <div class="skeleton-card"><div class="skeleton-shimmer"></div><div class="skeleton-h"></div><div><div class="skeleton-p"></div><div class="skeleton-p"></div></div><div class="skeleton-f"></div></div>
+            </div>
+        </main>
+
+        <!-- FOOTER -->
+        <footer>
+            <p>&copy; <span id="current-year">2026</span> <span id="footer-username">dkbk0809</span>. Designed with UI-UX Pro Max.</p>
+            <p style="margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                Powered by <a href="https://docs.github.com/en/rest" target="_blank" rel="noopener">GitHub REST API</a> &bull; Styled with Vanilla CSS
+            </p>
+        </footer>
+    </div>
+
+    <!-- JS 邏輯 -->
+    <script>
+        const CONFIG = {
+            username: 'dkbk0809',
+            apiUserUrl: 'https://api.github.com/users/dkbk0809',
+            apiReposUrl: 'https://api.github.com/users/dkbk0809/repos?per_page=100'
+        };
+
+        const state = {
+            userProfile: null,
+            repos: [],
+            featuredRepos: [],
+            regularRepos: [],
+            activeLanguage: 'All',
+            searchQuery: '',
+            sortBy: 'updated'
+        };
+
+        // 程式語言色彩庫 (GitHub 風格)
+        const languageColors = {
+            JavaScript: '#f1e05a',
+            HTML: '#e34c26',
+            CSS: '#563d7c',
+            TypeScript: '#3178c6',
+            Python: '#3572A5',
+            Java: '#b07219',
+            Go: '#00ADD8',
+            Rust: '#dea584',
+            'C++': '#f34b7d',
+            C: '#555555',
+            'C#': '#178600',
+            PHP: '#4F5D95',
+            Ruby: '#701516',
+            Shell: '#89e051',
+            Vue: '#41b883',
+            Swift: '#f05138',
+            Kotlin: '#A97BFF',
+            Dart: '#00B4AB',
+            Makefile: '#427819'
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+            fetchData();
+        });
+
+        // 串接 API
+        async function fetchData() {
+            try {
+                const [userRes, reposRes] = await Promise.all([
+                    fetch(CONFIG.apiUserUrl),
+                    fetch(CONFIG.apiReposUrl)
+                ]);
+
+                if (!userRes.ok || !reposRes.ok) {
+                    if (userRes.status === 403 || reposRes.status === 403) {
+                        throw new Error('RATE_LIMIT');
+                    }
+                    throw new Error('API_FAILED');
+                }
+
+                state.userProfile = await userRes.json();
+                const rawRepos = await reposRes.json();
+                
+                state.repos = rawRepos;
+                
+                // 分割精選儲存庫與普通儲存庫
+                // 精選規則：Star數大於0，或專案名稱包含 "AgentCoding"，或為最新更新的前2個專案
+                // 為了展示效果，我們設定 Star 數大於 0 或名稱含 "AgentCoding" 或者是最新的一個為精選。
+                
+                // 按更新時間排個序以方便挑選最新
+                const sortedByUpdated = [...rawRepos].sort((a,b) => new Date(b.updated_at) - new Date(a.updated_at));
+                
+                state.repos.forEach(repo => {
+                    const isAgentCoding = repo.name.toLowerCase() === 'agentcoding';
+                    const hasStars = repo.stargazers_count > 0;
+                    const isLatest = sortedByUpdated.length > 0 && sortedByUpdated[0].id === repo.id;
+                    
+                    if (isAgentCoding || hasStars || isLatest) {
+                        state.featuredRepos.push(repo);
+                    } else {
+                        state.regularRepos.push(repo);
+                    }
+                });
+                
+                // 如果精選區是空的，自動挑選最新更新的兩個專案放入精選
+                if (state.featuredRepos.length === 0 && rawRepos.length > 0) {
+                    state.featuredRepos = sortedByUpdated.slice(0, Math.min(2, sortedByUpdated.length));
+                    const featuredIds = state.featuredRepos.map(r => r.id);
+                    state.regularRepos = rawRepos.filter(r => !featuredIds.includes(r.id));
+                }
+
+                enableControls();
+                renderProfile();
+                renderLanguageStats();
+                renderLanguageFilters();
+                applyFiltersAndSort();
+
+            } catch (error) {
+                console.error(error);
+                renderError(error.message);
+            }
+        }
+
+        function enableControls() {
+            const searchInput = document.getElementById('search-input');
+            const sortSelect = document.getElementById('sort-select');
+            
+            searchInput.removeAttribute('disabled');
+            sortSelect.removeAttribute('disabled');
+            
+            searchInput.addEventListener('input', (e) => {
+                state.searchQuery = e.target.value.trim().toLowerCase();
+                applyFiltersAndSort();
+            });
+
+            sortSelect.addEventListener('change', (e) => {
+                state.sortBy = e.target.value;
+                applyFiltersAndSort();
+            });
+        }
+
+        // 渲染個人資料
+        function renderProfile() {
+            const area = document.getElementById('profile-area');
+            const u = state.userProfile;
+            const bio = u.bio || '這位開發者很低調，尚未填寫個人簡介。';
+
+            area.innerHTML = `
+                <div class="profile-container-inner">
+                    <div class="profile-main-row">
+                        <div class="avatar-glow-wrapper">
+                            <img src="${u.avatar_url}" alt="${u.name || u.login}" class="profile-avatar">
+                        </div>
+                        <div class="profile-details">
+                            <div class="profile-name-badge">
+                                <h1 class="profile-name">${u.name || u.login}</h1>
+                                <span class="profile-tag">@${u.login}</span>
+                            </div>
+                            <p class="profile-bio">${bio}</p>
+                            <div class="stats-grid">
+                                <div class="stat-card">
+                                    <span class="stat-val">${u.public_repos}</span>
+                                    <span class="stat-lbl">公開專案</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-val">${u.followers}</span>
+                                    <span class="stat-lbl">追隨者</span>
+                                </div>
+                                <div class="stat-card">
+                                    <span class="stat-val">${u.following}</span>
+                                    <span class="stat-lbl">追隨中</span>
+                                </div>
+                            </div>
+                            <div class="actions-row">
+                                <a href="${u.html_url}" target="_blank" rel="noopener" class="btn-glow">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
+                                    </svg>
+                                    探索我的 GitHub 主頁
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 語言統計條 (動態生成) -->
+                    <div class="language-stats-wrapper" id="language-stats-bar-area"></div>
+                </div>
+            `;
+            document.title = `${u.name || u.login} | UI/UX Portfolio`;
+            document.getElementById('footer-username').textContent = u.login;
+        }
+
+        // 計算並渲染程式語言佔比統計條
+        function renderLanguageStats() {
+            const barArea = document.getElementById('language-stats-bar-area');
+            if (!barArea) return;
+
+            // 統計各語言數量
+            const langCounts = {};
+            let totalLangs = 0;
+
+            state.repos.forEach(repo => {
+                if (repo.language) {
+                    langCounts[repo.language] = (langCounts[repo.language] || 0) + 1;
+                    totalLangs++;
+                }
+            });
+
+            if (totalLangs === 0) {
+                barArea.style.display = 'none';
+                return;
+            }
+
+            // 轉換為比例陣列並排序
+            const langPercentage = Object.keys(langCounts).map(lang => {
+                return {
+                    name: lang,
+                    count: langCounts[lang],
+                    percent: parseFloat(((langCounts[lang] / totalLangs) * 100).toFixed(1))
+                };
+            }).sort((a, b) => b.percent - a.percent);
+
+            // 只取前 5 大語言，其餘歸類為 Other
+            let topLangs = langPercentage;
+            let otherPercent = 0;
+            if (langPercentage.length > 5) {
+                topLangs = langPercentage.slice(0, 5);
+                const topSum = topLangs.reduce((sum, item) => sum + item.percent, 0);
+                otherPercent = parseFloat((100 - topSum).toFixed(1));
+                if (otherPercent > 0) {
+                    topLangs.push({ name: 'Other', percent: otherPercent, count: 0 });
+                }
+            }
+
+            // 繪製 Progress bar segments
+            const barHTML = topLangs.map(item => {
+                const color = languageColors[item.name] || '#8b949e';
+                return `<div class="lang-bar-segment" style="width: ${item.percent}%; background: ${color}" title="${item.name}: ${item.percent}%"></div>`;
+            }).join('');
+
+            // 繪製圖例說明
+            const legendHTML = topLangs.map(item => {
+                const color = languageColors[item.name] || '#8b949e';
+                return `
+                    <li class="lang-legend-item">
+                        <span class="lang-dot" style="background: ${color}"></span>
+                        <span>${item.name}</span>
+                        <span class="lang-percent">${item.percent}%</span>
+                    </li>
+                `;
+            }).join('');
+
+            barArea.innerHTML = `
+                <div class="lang-stats-header">
+                    <span>專案語言佔比</span>
+                </div>
+                <div class="lang-bar-container">
+                    ${barHTML}
+                </div>
+                <ul class="lang-legend-list">
+                    ${legendHTML}
+                </ul>
+            `;
+        }
+
+        // 渲染程式語言篩選按鈕
+        function renderLanguageFilters() {
+            const section = document.getElementById('filter-tags-section');
+            const list = document.getElementById('language-tags');
+            
+            const languages = ['All'];
+            state.repos.forEach(repo => {
+                if (repo.language && !languages.includes(repo.language)) {
+                    languages.push(repo.language);
+                }
+            });
+
+            if (languages.length <= 1) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'flex';
+            list.innerHTML = languages.map(lang => {
+                return `
+                    <button class="tag-btn ${lang === state.activeLanguage ? 'active' : ''}" 
+                            onclick="setLanguageFilter('${lang}')">
+                        ${lang === 'All' ? '全部' : lang}
+                    </button>
+                `;
+            }).join('');
+        }
+
+        function setLanguageFilter(lang) {
+            state.activeLanguage = lang;
+            const buttons = document.querySelectorAll('.tag-btn');
+            buttons.forEach(btn => {
+                if (btn.textContent.trim() === (lang === 'All' ? '全部' : lang)) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            applyFiltersAndSort();
+        }
+
+        // 過濾與排序
+        function applyFiltersAndSort() {
+            // 篩選函數
+            const filterFn = (repo) => {
+                // 1. 語言篩選
+                if (state.activeLanguage !== 'All' && repo.language !== state.activeLanguage) {
+                    return false;
+                }
+                // 2. 搜尋字詞
+                if (state.searchQuery) {
+                    const name = repo.name.toLowerCase();
+                    const desc = (repo.description || '').toLowerCase();
+                    const lang = (repo.language || '').toLowerCase();
+                    return name.includes(state.searchQuery) || 
+                           desc.includes(state.searchQuery) || 
+                           lang.includes(state.searchQuery);
+                }
+                return true;
+            };
+
+            // 排序函數
+            const sortFn = (a, b) => {
+                if (state.sortBy === 'stars') {
+                    return b.stargazers_count - a.stargazers_count;
+                } else if (state.sortBy === 'name') {
+                    return a.name.localeCompare(b.name);
+                } else {
+                    return new Date(b.updated_at) - new Date(a.updated_at);
+                }
+            };
+
+            // 執行篩選與排序
+            const filteredFeatured = state.featuredRepos.filter(filterFn).sort(sortFn);
+            const filteredRegular = state.regularRepos.filter(filterFn).sort(sortFn);
+
+            renderLists(filteredFeatured, filteredRegular);
+        }
+
+        // 渲染專案列表
+        function renderLists(featured, regular) {
+            const featuredWrapper = document.getElementById('featured-section-wrapper');
+            const featuredGrid = document.getElementById('featured-repos-grid');
+            const allGrid = document.getElementById('all-repos-grid');
+            
+            const featuredCount = document.getElementById('featured-count');
+            const allCount = document.getElementById('all-count');
+            const mainTitle = document.getElementById('main-list-title');
+
+            // 1. 渲染精選專案
+            if (featured.length > 0) {
+                featuredWrapper.style.display = 'block';
+                featuredCount.textContent = featured.length;
+                featuredGrid.innerHTML = featured.map(repo => renderCardHTML(repo, true)).join('');
+            } else {
+                featuredWrapper.style.display = 'none';
+            }
+
+            // 2. 渲染一般公開專案
+            allCount.textContent = regular.length;
+            if (regular.length > 0) {
+                allGrid.innerHTML = regular.map(repo => renderCardHTML(repo, false)).join('');
+                if (featured.length > 0) {
+                    mainTitle.innerHTML = `公開儲存庫 <span class="badge-count" id="all-count">${regular.length}</span>`;
+                } else {
+                    mainTitle.innerHTML = `所有公開儲存庫 <span class="badge-count" id="all-count">${regular.length}</span>`;
+                }
+            } else {
+                allGrid.innerHTML = '';
+            }
+
+            // 3. 處理完全沒有符合結果的狀態
+            if (featured.length === 0 && regular.length === 0) {
+                allGrid.innerHTML = `
+                    <div class="status-box">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>
+                        </svg>
+                        <h3 class="status-box-title">找不到任何儲存庫</h3>
+                        <p class="status-box-desc">請嘗試調整您的關鍵字或主要語言篩選條件。</p>
+                    </div>
+                `;
+            }
+        }
+
+        // 生成單個專案卡片 HTML
+        function renderCardHTML(repo, isFeatured) {
+            const updateDate = new Date(repo.updated_at).toLocaleDateString('zh-TW', {
+                year: 'numeric',
+                month: '2-digit',
+                day: '2-digit'
+            });
+
+            const langColor = languageColors[repo.language] || '#8b949e';
+            const langBadge = repo.language ? `
+                <div class="repo-lang" style="display:flex; align-items:center; gap:6px; color:var(--text-secondary);">
+                    <span class="lang-color" style="width:10px; height:10px; border-radius:50%; background-color:${langColor};"></span>
+                    <span>${repo.language}</span>
+                </div>
+            ` : '';
+
+            const desc = repo.description || '這項專案沒有留下描述。';
+
+            if (isFeatured) {
+                // 精選卡片 (流光卡片)
+                return `
+                    <article class="glow-card" onclick="window.open('${repo.html_url}', '_blank')">
+                        <div class="glow-badge">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            Featured
+                        </div>
+                        <div class="repo-title-wrapper">
+                            <h3 class="featured-name">${repo.name}</h3>
+                            <p class="featured-desc" style="margin-top:14px;">${desc}</p>
+                        </div>
+                        <div class="featured-footer">
+                            <div class="meta-group-left">
+                                ${langBadge}
+                                <div class="meta-stat">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                                    </svg>
+                                    <span>${repo.stargazers_count}</span>
+                                </div>
+                                <div class="meta-stat">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M18.8 3a2.2 2.2 0 0 0-2 1.3c-.6.3-1 .8-1.3 1.4L12.4 8c-.2-.6-.7-1-1.4-1a2.2 2.2 0 0 0-2.2 2.2c0 .8.4 1.5 1 1.9v3.8c-.6.4-1 1.1-1 1.9a2.2 2.2 0 1 0 4.4 0c0-.8-.4-1.5-1-1.9v-3.8c.6-.4 1-1.1 1-1.9 0-.4-.1-.8-.3-1.1l3.1-2.3c.3.3.7.5 1.2.5a2.2 2.2 0 1 0 0-4.4zm-7.8 7a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4zm0 8.4a1.2 1.2 0 1 1 0-2.4 1.2 1.2 0 0 1 0 2.4zm7.8-13a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/>
+                                    </svg>
+                                    <span>${repo.forks_count}</span>
+                                </div>
+                            </div>
+                            <span class="meta-date">${updateDate} 更新</span>
+                        </div>
+                    </article>
+                `;
+            } else {
+                // 普通卡片 (簡約毛玻璃)
+                return `
+                    <article class="simple-card" onclick="window.open('${repo.html_url}', '_blank')">
+                        <div>
+                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                                <h3 class="simple-name">${repo.name}</h3>
+                                <svg class="icon-link" viewBox="0 0 24 24">
+                                    <path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/>
+                                </svg>
+                            </div>
+                            <p class="simple-desc">${desc}</p>
+                        </div>
+                        <div class="featured-footer">
+                            <div class="meta-group-left">
+                                ${langBadge}
+                                <div class="meta-stat">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                                    </svg>
+                                    <span>${repo.stargazers_count}</span>
+                                </div>
+                            </div>
+                            <span class="meta-date">${updateDate} 更新</span>
+                        </div>
+                    </article>
+                `;
+            }
+        }
+
+        // 渲染錯誤狀態
+        function renderError(type) {
+            const grid = document.getElementById('all-repos-grid');
+            const profile = document.getElementById('profile-area');
+            const featured = document.getElementById('featured-section-wrapper');
+            
+            featured.style.display = 'none';
+
+            let title = '資料載入失敗';
+            let desc = '我們在向 GitHub 請求您的儲存庫資料時遇到了問題。';
+
+            if (type === 'RATE_LIMIT') {
+                title = 'API 請求次數已達上限 (Rate Limit)';
+                desc = '由於 GitHub API 的限制，目前無法載入即時資料。請稍候再試，或點擊下方按鈕前往 GitHub 直接瀏覽。';
+            }
+
+            profile.innerHTML = `
+                <div class="profile-container-inner">
+                    <div class="profile-main-row">
+                        <div class="avatar-glow-wrapper" style="box-shadow: none; background: rgba(255,255,255,0.05);">
+                            <div style="width:100%; height:100%; border-radius:50%; background:var(--bg-secondary); display:flex; align-items:center; justify-content:center; font-size:3rem;">👤</div>
+                        </div>
+                        <div class="profile-details">
+                            <div class="profile-name-badge">
+                                <h1 class="profile-name">dkbk0809</h1>
+                                <span class="profile-tag">@dkbk0809</span>
+                            </div>
+                            <p class="profile-bio">GitHub 開發者個人介紹網頁</p>
+                            <p style="font-size:0.9rem; color:var(--text-muted);">API 限制中，請使用下方按鈕前往 GitHub 官方網站查看最新資訊。</p>
+                            <div class="actions-row" style="margin-top: 15px;">
+                                <a href="https://github.com/dkbk0809" target="_blank" rel="noopener" class="btn-glow">
+                                    前往 GitHub 主頁
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            grid.innerHTML = `
+                <div class="status-box" style="margin-top: 20px;">
+                    <svg viewBox="0 0 24 24" style="fill: #ef4444;">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+                    </svg>
+                    <h3 class="status-box-title">${title}</h3>
+                    <p class="status-box-desc">${desc}</p>
+                    <div style="display:flex; gap:12px; margin-top:10px;">
+                        <button onclick="location.reload()" class="btn-glow">重新整理</button>
+                        <a href="https://github.com/dkbk0809" target="_blank" rel="noopener" class="btn-outline">
+                            我的 GitHub 主頁
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
